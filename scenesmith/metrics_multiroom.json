@@ -1,0 +1,96 @@
+{
+  "llm": "gpt-4o",
+  "note": "SceneSmith (GPT-4o, validator ON, no bypass) furnished scene vs + our sim-readiness layer",
+  "rooms": [
+    {
+      "room": "bedroom",
+      "objects": 3,
+      "overlaps": [
+        1,
+        0
+      ],
+      "validation_failures": [
+        1,
+        0
+      ],
+      "physics_grounded": [
+        false,
+        true
+      ],
+      "sim2sim_stability": [
+        1.0,
+        1.0
+      ],
+      "sim2sim_disagree_m": [
+        0.0,
+        0.001
+      ]
+    },
+    {
+      "room": "living_room",
+      "objects": 6,
+      "overlaps": [
+        1,
+        0
+      ],
+      "validation_failures": [
+        1,
+        0
+      ],
+      "physics_grounded": [
+        false,
+        true
+      ],
+      "sim2sim_stability": [
+        0.833,
+        1.0
+      ],
+      "sim2sim_disagree_m": [
+        0.016,
+        0.001
+      ]
+    },
+    {
+      "room": "home_office",
+      "objects": 3,
+      "overlaps": [
+        1,
+        0
+      ],
+      "validation_failures": [
+        1,
+        0
+      ],
+      "physics_grounded": [
+        false,
+        true
+      ],
+      "sim2sim_stability": [
+        0.333,
+        1.0
+      ],
+      "sim2sim_disagree_m": [
+        0.075,
+        0.001
+      ]
+    }
+  ],
+  "aggregate": {
+    "total_overlaps": [
+      3,
+      0
+    ],
+    "total_validation_failures": [
+      3,
+      0
+    ],
+    "mean_sim2sim_stability": [
+      0.722,
+      1.0
+    ],
+    "physics_grounded_rooms": [
+      0,
+      3
+    ]
+  }
+}

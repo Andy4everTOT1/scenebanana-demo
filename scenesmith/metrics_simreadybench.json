@@ -1,0 +1,95 @@
+{
+  "note": "SceneSmith (strongest agentic baseline) vs our sim-readiness layer; external layout baselines not run (need each method's full setup).",
+  "rooms": {
+    "bedroom": {
+      "SceneSmith / Qwen (designed)": {
+        "n_objects": 3,
+        "out_of_bounds": 0,
+        "collisions": 2,
+        "support_relations": 0,
+        "blocked_articulation": 2,
+        "navigable_fraction": 0.518,
+        "navigable_connected": true,
+        "reachable_fraction": 1.0,
+        "sim2sim_stability": 1.0,
+        "physics_grounded": false
+      },
+      "SceneSmith / GPT-4o (designed)": {
+        "n_objects": 3,
+        "out_of_bounds": 0,
+        "collisions": 1,
+        "support_relations": 0,
+        "blocked_articulation": 2,
+        "navigable_fraction": 0.499,
+        "navigable_connected": true,
+        "reachable_fraction": 1.0,
+        "sim2sim_stability": 1.0,
+        "physics_grounded": false
+      },
+      "+ ours (sim-readiness)": {
+        "n_objects": 3,
+        "out_of_bounds": 0,
+        "collisions": 0,
+        "support_relations": 0,
+        "blocked_articulation": 1,
+        "navigable_fraction": 0.492,
+        "navigable_connected": true,
+        "reachable_fraction": 1.0,
+        "sim2sim_stability": 1.0,
+        "physics_grounded": true
+      }
+    },
+    "living_room": {
+      "SceneSmith / GPT-4o (designed)": {
+        "n_objects": 6,
+        "out_of_bounds": 0,
+        "collisions": 1,
+        "support_relations": 0,
+        "blocked_articulation": 0,
+        "navigable_fraction": 0.487,
+        "navigable_connected": true,
+        "reachable_fraction": 1.0,
+        "sim2sim_stability": 0.833,
+        "physics_grounded": false
+      },
+      "+ ours (sim-readiness)": {
+        "n_objects": 6,
+        "out_of_bounds": 0,
+        "collisions": 0,
+        "support_relations": 0,
+        "blocked_articulation": 0,
+        "navigable_fraction": 0.492,
+        "navigable_connected": false,
+        "reachable_fraction": 1.0,
+        "sim2sim_stability": 1.0,
+        "physics_grounded": true
+      }
+    },
+    "home_office": {
+      "SceneSmith / GPT-4o (designed)": {
+        "n_objects": 3,
+        "out_of_bounds": 0,
+        "collisions": 1,
+        "support_relations": 0,
+        "blocked_articulation": 1,
+        "navigable_fraction": 0.754,
+        "navigable_connected": true,
+        "reachable_fraction": 1.0,
+        "sim2sim_stability": 0.333,
+        "physics_grounded": false
+      },
+      "+ ours (sim-readiness)": {
+        "n_objects": 3,
+        "out_of_bounds": 0,
+        "collisions": 0,
+        "support_relations": 0,
+        "blocked_articulation": 0,
+        "navigable_fraction": 0.716,
+        "navigable_connected": true,
+        "reachable_fraction": 1.0,
+        "sim2sim_stability": 1.0,
+        "physics_grounded": true
+      }
+    }
+  }
+}

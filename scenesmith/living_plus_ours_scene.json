@@ -1,0 +1,333 @@
+{
+ "schema_version": 1,
+ "created_at": "2026-06-23T03:38:50.642077+00:00",
+ "scene_id": "living_plus_ours",
+ "stage_name": "scene_after_furniture",
+ "room_geometry": {
+  "room_id": "bedroom",
+  "room_type": "bedroom",
+  "length": 5.0,
+  "width": 4.18105276636831,
+  "wall_height": 2.8,
+  "wall_thickness": 0.05,
+  "floor_z": 0.0,
+  "sdf_path": null,
+  "walls": [],
+  "openings": [],
+  "metadata": {
+   "expanded_for_layout": true
+  }
+ },
+ "objects": [
+  {
+   "object_id": "l_shaped_sofa_0",
+   "object_type": "furniture",
+   "semantic_role": "l_shaped_sofa",
+   "layer": 0,
+   "dimensions": {
+    "width": 2.0,
+    "depth": 1.626075029373169,
+    "height": 0.6651480004105679
+   },
+   "pose": {
+    "x": -0.021264531002262336,
+    "y": -1.1233358808811684,
+    "z": 0.0,
+    "yaw_deg": -0.23835243516164464,
+    "rotation_wxyz": [
+     0.9999978368,
+     0.0,
+     0.0,
+     -0.0020800159
+    ]
+   },
+   "asset_ref": {
+    "asset_id": "l_shaped_sofa_0",
+    "source_asset_id": null,
+    "hssd_mesh_id": "3d5dbeba4ba6e74747ee29b8f57d31b1f55b49f1",
+    "geometry_path": null,
+    "sdf_path": null,
+    "image_path": null,
+    "source": "hssd",
+    "metadata": {}
+   },
+   "support_surfaces": [],
+   "placement_info": null,
+   "source_paths": {},
+   "metadata": {
+    "physical_properties": {
+     "mass_kg": 64.8948,
+     "friction": 0.6,
+     "restitution": 0.1,
+     "inertia_diag": [
+      16.69172,
+      24.02419,
+      35.93075
+     ],
+     "density": 30.0,
+     "method": "prior"
+    }
+   }
+  },
+  {
+   "object_id": "tv_stand_0",
+   "object_type": "furniture",
+   "semantic_role": "tv_stand",
+   "layer": 0,
+   "dimensions": {
+    "width": 1.5,
+    "depth": 0.4761841297149658,
+    "height": 0.5488470426505785
+   },
+   "pose": {
+    "x": 0.002859338670005107,
+    "y": 1.6891092437534128,
+    "z": 0.0,
+    "yaw_deg": 179.3288033930895,
+    "rotation_wxyz": [
+     0.0058572619,
+     0.0,
+     0.0,
+     0.9999828461
+    ]
+   },
+   "asset_ref": {
+    "asset_id": "tv_stand_0",
+    "source_asset_id": null,
+    "hssd_mesh_id": "c70ef2f552fd561ae25806cfe63d5d7e07ac6f76",
+    "geometry_path": null,
+    "sdf_path": null,
+    "image_path": null,
+    "source": "hssd",
+    "metadata": {}
+   },
+   "support_surfaces": [],
+   "placement_info": null,
+   "source_paths": {},
+   "metadata": {
+    "physical_properties": {
+     "mass_kg": 27.442,
+     "friction": 0.5,
+     "restitution": 0.1,
+     "inertia_diag": [
+      1.20741,
+      5.83424,
+      5.66391
+     ],
+     "density": 70.0,
+     "method": "prior"
+    }
+   }
+  },
+  {
+   "object_id": "coffee_table_0",
+   "object_type": "furniture",
+   "semantic_role": "coffee_table",
+   "layer": 0,
+   "dimensions": {
+    "width": 1.2958515286445618,
+    "depth": 0.4000000059604645,
+    "height": 0.38312019167352673
+   },
+   "pose": {
+    "x": -0.0019483399916246577,
+    "y": 0.2519089933805288,
+    "z": 0.0,
+    "yaw_deg": 179.43955348802612,
+    "rotation_wxyz": [
+     0.004890799,
+     0.0,
+     0.0,
+     0.99998804
+    ]
+   },
+   "asset_ref": {
+    "asset_id": "coffee_table_0",
+    "source_asset_id": null,
+    "hssd_mesh_id": "10f82d87bf341e228ce8dee47a5c39a438eb9cda",
+    "geometry_path": null,
+    "sdf_path": null,
+    "image_path": null,
+    "source": "hssd",
+    "metadata": {}
+   },
+   "support_surfaces": [],
+   "placement_info": null,
+   "source_paths": {},
+   "metadata": {
+    "physical_properties": {
+     "mass_kg": 8.9364,
+     "friction": 0.5,
+     "restitution": 0.1,
+     "inertia_diag": [
+      0.22846,
+      1.35983,
+      1.36968
+     ],
+     "density": 45.0,
+     "method": "prior"
+    }
+   }
+  },
+  {
+   "object_id": "floor_lamp_0",
+   "object_type": "furniture",
+   "semantic_role": "floor_lamp",
+   "layer": 0,
+   "dimensions": {
+    "width": 0.3999999910593033,
+    "depth": 0.9886130094528198,
+    "height": 2.3684422969818115
+   },
+   "pose": {
+    "x": 1.3146084950808088,
+    "y": 1.3194956532150315,
+    "z": 0.0,
+    "yaw_deg": 91.02185684366177,
+    "rotation_wxyz": [
+     0.7007732083,
+     0.0,
+     0.0,
+     0.7133841255
+    ]
+   },
+   "asset_ref": {
+    "asset_id": "floor_lamp_0",
+    "source_asset_id": null,
+    "hssd_mesh_id": "1dd1d62f7ee0db01a8b67719ed4105279bb937ba",
+    "geometry_path": null,
+    "sdf_path": null,
+    "image_path": null,
+    "source": "hssd",
+    "metadata": {}
+   },
+   "support_surfaces": [],
+   "placement_info": null,
+   "source_paths": {},
+   "metadata": {
+    "physical_properties": {
+     "mass_kg": 9.3659,
+     "friction": 0.45,
+     "restitution": 0.1,
+     "inertia_diag": [
+      5.141,
+      4.50306,
+      0.8877
+     ],
+     "density": 10.0,
+     "method": "prior"
+    }
+   }
+  },
+  {
+   "object_id": "side_chair_0",
+   "object_type": "furniture",
+   "semantic_role": "side_chair",
+   "layer": 0,
+   "dimensions": {
+    "width": 0.7887324392795563,
+    "depth": 0.591548889875412,
+    "height": 0.7000000141993041
+   },
+   "pose": {
+    "x": -1.9267140645786893,
+    "y": 0.769030783610551,
+    "z": 0.0,
+    "yaw_deg": -107.51018541801368,
+    "rotation_wxyz": [
+     0.5912379656,
+     0.0,
+     0.0,
+     -0.8064971594
+    ]
+   },
+   "asset_ref": {
+    "asset_id": "side_chair_0",
+    "source_asset_id": null,
+    "hssd_mesh_id": "ec5696be45d44b2510cc356672117115056bfec8",
+    "geometry_path": null,
+    "sdf_path": null,
+    "image_path": null,
+    "source": "hssd",
+    "metadata": {}
+   },
+   "support_surfaces": [],
+   "placement_info": null,
+   "source_paths": {},
+   "metadata": {
+    "physical_properties": {
+     "mass_kg": 9.1448,
+     "friction": 0.5,
+     "restitution": 0.1,
+     "inertia_diag": [
+      0.64009,
+      0.8475,
+      0.74075
+     ],
+     "density": 28.0,
+     "method": "prior"
+    }
+   }
+  },
+  {
+   "object_id": "potted_plant_0",
+   "object_type": "furniture",
+   "semantic_role": "potted_plant",
+   "layer": 0,
+   "dimensions": {
+    "width": 0.4067707061767578,
+    "depth": 0.2783225178718567,
+    "height": 0.4000000059604645
+   },
+   "pose": {
+    "x": -1.2641815360429096,
+    "y": 0.4288580456389713,
+    "z": 0.0,
+    "yaw_deg": 44.28472895415581,
+    "rotation_wxyz": [
+     0.9262501976,
+     0.0,
+     0.0,
+     0.3769092351
+    ]
+   },
+   "asset_ref": {
+    "asset_id": "potted_plant_0",
+    "source_asset_id": null,
+    "hssd_mesh_id": "xxxxc24b125dxd5dex4ffbxa5a7xf41b4aa6707f",
+    "geometry_path": null,
+    "sdf_path": null,
+    "image_path": null,
+    "source": "hssd",
+    "metadata": {}
+   },
+   "support_surfaces": [],
+   "placement_info": null,
+   "source_paths": {},
+   "metadata": {
+    "physical_properties": {
+     "mass_kg": 3.6228,
+     "friction": 0.5,
+     "restitution": 0.1,
+     "inertia_diag": [
+      0.07169,
+      0.09826,
+      0.07334
+     ],
+     "density": 80.0,
+     "method": "prior"
+    }
+   }
+  }
+ ],
+ "relations": [],
+ "placement_intents": [],
+ "placement_results": [],
+ "validation_report": null,
+ "metadata": {
+  "support_relations_inferred": 0,
+  "physical_properties_method": "prior",
+  "collision_projection": true,
+  "residual_overlaps": 0
+ }
+}

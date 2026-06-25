@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8">
+<title>SceneBanana:原版 vs 增强版(我们的贡献)</title>
+<style>
+ body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",Segoe UI,Roboto,Helvetica,sans-serif;max-width:1140px;margin:24px auto;color:#1c2230;padding:0 16px;line-height:1.7}
+ h1{font-size:27px;margin-bottom:4px} h2{font-size:19px;margin:4px 0 12px}
+ .sub{color:#8a93a5;font-size:14px;margin-top:0}
+ .muted{color:#8a93a5;font-weight:400;font-size:13.5px}
+ .intro{background:#f4f7fb;border:1px solid #e1e8f0;border-radius:10px;padding:14px 20px;margin:14px 0}
+ .pill{display:inline-block;background:#eaf3ff;color:#175cd3;border-radius:999px;padding:2px 11px;font-size:12px;margin:2px}
+ .card{border:1px solid #e1e8f0;border-radius:12px;padding:18px;margin:22px 0;box-shadow:0 1px 3px #0001}
+ .grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+ figure{margin:0} img{width:100%;border-radius:8px;background:#eef;aspect-ratio:1/1;object-fit:cover}
+ figcaption{font-size:12.5px;color:#5b6577;margin-top:6px;text-align:center}
+ table{width:100%;border-collapse:collapse;margin-top:14px;font-size:14px}
+ th,td{border-bottom:1px solid #eef;padding:7px 10px;text-align:left}
+ th{color:#6b7686;font-weight:600}
+ .good{color:#0a7d33;font-weight:700} .neu{color:#333}
+ .tag{font-size:11px;color:#a33;border:1px solid #f0c2c2;border-radius:6px;padding:1px 6px;margin-left:6px}
+ .tagok{color:#0a7d33;border-color:#bfe3c8}
+</style></head><body>
+
+<h1>SceneBanana — 原版 vs. 增强版(我们的贡献)</h1>
+<p class="sub">文本 &rarr; 图像(<b>gpt-image-2</b>)&rarr; 度量级 3D 场景。在 3 个生成房间上对比。</p>
+
+<div class="intro">
+ <p><b>原版</b> = SceneBanana 长方体原型管线(仅几何)。<b>增强版(我们的)</b> 增加了:
+ <span class="pill">GeoGround(VGGT 图像&rarr;度量 3D)</span>
+ <span class="pill">SupportGraph 支撑图</span>
+ <span class="pill">PhysPropertyNet(质量/摩擦)</span>
+ <span class="pill">PhysRepair</span>
+ <span class="pill">非穿透投影</span>
+ <span class="pill">SAM 掩膜足迹</span>
+ <span class="pill">CLIP 外观检索</span>
+ <span class="pill">Sim2Sim(Drake+MuJoCo 审计)</span>
+ <span class="pill">真实 HSSD 网格 + Cycles 全局光</span></p>
+ <p class="muted">校验失败越少、跨仿真器分歧越小越好;Sim2Sim 稳定性越高越好。
+ 增强管线还能恢复原版缺失的支撑关系与逐物体物理属性。</p>
+</div>
+
+<!-- SCENESMITH 头对头 -->
+<div class="card" style="border-color:#cfe0f5;background:#fbfdff">
+ <h2>与 SceneSmith 头对头 <span class="muted">— 相同提示词、相同 HSSD 网格,用我们的指标审计</span></h2>
+ <p class="muted" style="margin-top:0">
+  SceneSmith(智能体式 户型 + 家具 管线)在相同提示词
+  <i>"一间卧室:一张床、一个带台灯的床头柜、一个抽屉柜"</i> 上端到端运行,检索 <b>真实 HSSD 网格</b>,
+  在 <b>两种智能体 LLM</b> 上各跑一遍 —— 开源模型(Qwen)与前沿模型(<b>GPT-4o</b>,代表公平的最佳情形)。
+  我们把每个布置好的场景载入自己的 schema,用完全相同的 SimReadyBench / Sim2Sim / 物理检查来审计。
+  我们的贡献是一层 <b>仿真就绪层</b>(SupportGraph + PhysPropertyNet + yaw 感知非穿透投影),
+  能把任意已布置场景变成物理有效、仿真稳定的场景。</p>
+
+ <h2 style="font-size:16px;margin:18px 0 4px">A. GPT-4o 智能体 <span class="muted">— 公平最佳情形(校验器开启,不绕过)</span></h2>
+ <p class="muted" style="margin-top:0">在 GPT-4o 上资产校验器工作正常(正确接受真实的床/抽屉柜网格),所以 SceneSmith 能干净地布置房间,
+  摆放合理、基本轴对齐。但它仍残留一处重叠(一个旋转约 100&deg; 的抽屉柜压到床)且 <b>没有物理属性</b>;
+  我们的层消除重叠并接地质量/摩擦。仅仅为了让 GPT-4o 完成布置,就得修两个稳定性 bug:一个 1148 个不连通组件的
+  HSSD 网格把"碎片移除"步骤推到 <b>263&nbsp;GB 内存(被 OOM 杀掉)</b>,以及 Blender 的 glb&rarr;gltf 导出
+  <b>把一张 2.2&nbsp;m 的床塌缩成 0.05&nbsp;mm 的薄片</b>。即便如此,GPT-4o 的智能体循环 <b>46 分钟没收敛</b>
+  (卡在反复检查家具朝向),凸显了智能体管线的不稳定性。</p>
+ <div class="grid" style="grid-template-columns:1fr 1fr">
+  <figure><img src="bedroom/enhanced_render.png" style="object-fit:cover"><figcaption><b>我们的</b> — 重建驱动摆放:每个物体的位置/坐落高度直接取自 VGGT 三维重建(台灯坐在床头柜上、挂画贴墙、无悬空)</figcaption></figure>
+  <figure><img src="scenesmith/render_gpt_designed/gpt_designed.png" style="object-fit:cover"><figcaption><b>SceneSmith / GPT-4o</b> — 文本&rarr;3D,相同 HSSD 网格,用我们的 Cycles 管线渲染(yaw 感知)</figcaption></figure>
+ </div>
+ <figure style="margin:14px 0">
+  <img src="scenesmith/footprint_compare_gpt.png" style="width:100%;object-fit:contain;background:#fff;border:1px solid #e1e8f0">
+  <figcaption>GPT-4o 布置的卧室(真实 HSSD 网格),俯视足迹。<b>左:</b>旋转的抽屉柜压到床(1 对重叠)。
+   <b>右:</b>我们的投影把它们分开;质量/摩擦已接地。</figcaption>
+ </figure>
+ <table>
+  <tr><th>指标</th><th>SceneSmith / GPT-4o<br><span class="muted">(布置结果)</span></th><th>+ <b>我们的</b><br><span class="muted">(仿真就绪层)</span></th></tr>
+  <tr><td>物体间重叠 &darr;</td><td>1</td><td class="good">0</td></tr>
+  <tr><td>校验失败 &darr;</td><td>1</td><td class="good">0</td></tr>
+  <tr><td>物理属性</td><td>无 <span class="tag">常数</span></td><td class="good">已估计 <span class="tag tagok">质量/摩擦</span></td></tr>
+  <tr><td>Sim2Sim 稳定性 &uarr;</td><td>100%</td><td class="good">100%</td></tr>
+  <tr><td>Sim2Sim 分歧(m)&darr;</td><td>0.00</td><td class="good">0.001</td></tr>
+ </table>
+
+ <h3 style="font-size:14.5px;margin:20px 0 4px">多房型(GPT-4o,N=3):结论跨房型成立</h3>
+ <div class="grid">
+  <figure><img src="scenesmith/render_gpt_designed/gpt_designed.png" style="object-fit:cover"><figcaption>卧室 — 床、床头柜、抽屉柜</figcaption></figure>
+  <figure><img src="scenesmith/render_living_designed/living_designed.png" style="object-fit:cover"><figcaption>客厅 — 沙发、茶几、电视柜、落地灯(+椅、绿植)</figcaption></figure>
+  <figure><img src="scenesmith/render_office_designed/office_designed.png" style="object-fit:cover"><figcaption>书房 — 书桌、办公椅、书架</figcaption></figure>
+ </div>
+ <table>
+  <tr><th>房间(真实 HSSD 网格)</th><th>重叠<br><span class="muted">SS &rarr; +我们</span></th><th>校验失败<br><span class="muted">SS &rarr; +我们</span></th><th>物理<br><span class="muted">SS &rarr; +我们</span></th><th>Sim2Sim 稳定性<br><span class="muted">SS &rarr; +我们</span></th></tr>
+  <tr><td>卧室</td><td>1 &rarr; <b class="good">0</b></td><td>1 &rarr; <b class="good">0</b></td><td>无 &rarr; <b class="good">已接地</b></td><td>100% &rarr; <b class="good">100%</b></td></tr>
+  <tr><td>客厅</td><td>1 &rarr; <b class="good">0</b></td><td>1 &rarr; <b class="good">0</b></td><td>无 &rarr; <b class="good">已接地</b></td><td>83% &rarr; <b class="good">100%</b></td></tr>
+  <tr><td>书房</td><td>1 &rarr; <b class="good">0</b></td><td>1 &rarr; <b class="good">0</b></td><td>无 &rarr; <b class="good">已接地</b></td><td>33% &rarr; <b class="good">100%</b></td></tr>
+  <tr style="border-top:2px solid #cfe0f5"><td><b>合计 / 均值</b></td><td><b>3 &rarr; <span class="good">0</span></b></td><td><b>3 &rarr; <span class="good">0</span></b></td><td><b>0/3 &rarr; <span class="good">3/3</span></b></td><td><b>72% &rarr; <span class="good">100%</span></b></td></tr>
+ </table>
+ <p class="muted">每个 SceneSmith / GPT-4o 房间都恰好带一处物体间重叠、一处校验失败、且无物理属性;
+  我们的仿真就绪层把三者全部修成物理有效、质量/摩擦接地、仿真稳定的场景。
+  上方渲染图是 SceneSmith 布置的场景(真实 HSSD 网格),经我们的 yaw 感知 Cycles 管线渲染。</p>
+
+ <h2 style="font-size:16px;margin:24px 0 4px">B. Qwen 智能体 <span class="muted">— 暴露两种失败模式</span></h2>
+ <figure style="margin:14px 0">
+  <img src="scenesmith/footprint_compare.png" style="width:100%;aspect-ratio:auto;object-fit:contain;background:#fff;border:1px solid #e1e8f0">
+  <figcaption>俯视足迹(真实 HSSD 网格)。<b>左:</b>SceneSmith 的布置 —— 旋转 90&deg; 的床
+   同时穿插进抽屉柜和床头柜(3 个物体碰撞)。<b>右:</b>我们的 yaw 感知、质量加权投影把它们就地分开
+   (无碰撞);重床基本不动,较轻的物件移动。</figcaption>
+ </figure>
+ <div class="grid">
+  <figure><img src="scenesmith/ss_designed_top.png" style="object-fit:contain;background:#eef"><figcaption><b>SceneSmith</b> — 俯视(床旋转 90°,与床头柜和抽屉柜重叠)</figcaption></figure>
+  <figure><img src="scenesmith/ss_designed_side.png" style="object-fit:contain;background:#eef"><figcaption><b>SceneSmith</b> — 侧视(床挤进抽屉柜)</figcaption></figure>
+  <figure style="display:flex;align-items:center;justify-content:center;background:#f4f7fb;border-radius:8px;padding:10px">
+   <figcaption style="text-align:left;color:#3a4456;font-size:13px;line-height:1.7">
+    <b>我们观察到的两种失败模式:</b><br>
+    ① 用 Qwen 作智能体 LLM 时,SceneSmith 的 <b>VLM 资产校验器过度拒绝</b> 每个检索到的网格
+    (把真实的床标成"衣柜")&rarr; 交出一个 <b>空房间</b>,而它的 critic 仍打 <b>10/10</b>。<br>
+    ② 绕过校验后它能布置房间,但它 <b>自带的非穿透投影崩溃</b>,
+    把床甩到 <b>z = &minus;1103&nbsp;m</b>(飞出世界)。</figcaption>
+  </figure>
+ </div>
+ <table>
+  <tr><th>指标</th><th>SceneSmith<br><span class="muted">(布置结果)</span></th><th>SceneSmith<br><span class="muted">(经它自带投影后)</span></th><th>SceneSmith + <b>我们的</b><br><span class="muted">(仿真就绪层)</span></th></tr>
+  <tr><td>物体间重叠 &darr;</td><td>2</td><td>0 <span class="muted">(床被甩飞)</span></td><td class="good">0</td></tr>
+  <tr><td>校验失败 &darr;</td><td>2</td><td>4</td><td class="good">0</td></tr>
+  <tr><td>物理属性</td><td>无 <span class="tag">常数</span></td><td>无 <span class="tag">常数</span></td><td class="good">已估计 <span class="tag tagok">质量/摩擦</span></td></tr>
+  <tr><td>Sim2Sim 稳定性 &uarr;</td><td>100%</td><td>67%</td><td class="good">100%</td></tr>
+  <tr><td>Sim2Sim 分歧(m)&darr;</td><td>0.00</td><td>10273.0 <span class="tag">床&rarr;虚空</span></td><td class="good">0.001</td></tr>
+ </table>
+ <p class="muted">SceneSmith 的投影"解决"重叠的方式只是 <b>把床射出房间</b>
+  (z=&minus;1103&nbsp;m,跨仿真器分歧 10&nbsp;公里,稳定性 100%&rarr;67%)。给定相同的布置,
+  我们的 <b>yaw 感知、质量加权</b> 投影把旋转 90° 的床与床头柜、抽屉柜 <i>就地</i> 分开
+  (重叠 2&rarr;0,校验失败 2&rarr;0),接地逐物体质量/摩擦,并保持 Drake&amp;MuJoCo 一致性 100%(0.001&nbsp;m)。
+  <span class="muted">SceneSmith 跑在 Qwen 通道 + HSSD 检索;其 VLM 校验器被绕过,房间才得以布置。</span></p>
+</div>
+
+<!-- SUPPORTGRAPH -->
+<div class="card" style="border-color:#cfe0f5;background:#fbfdff">
+ <h2>SupportGraph:显式化"什么压在什么上" <span class="muted">— 扁平生成器丢掉的物理结构</span></h2>
+ <p class="muted" style="margin-top:0">
+  可仿真的场景不只需要 3D 长方体 —— 还需要 <b>支撑结构</b>:哪个物体压在哪个面上。
+  SupportGraph 从几何(底部高度 + 足迹包含)推断它,把每个子物体绑定到父物体表面并加上 <code>support_on</code> 关系,
+  标记为 layer-1 可操作物。现在它支持 <b>桌面和内部隔层</b>,并排除墙物(床后面的窗帘不算"压在"床上)。</p>
+ <div class="grid" style="grid-template-columns:1.1fr 0.9fr">
+  <figure><img src="scenesmith/render_support_demo/support_demo.png" style="object-fit:cover"><figcaption>恢复出的分层场景(真实 HSSD 网格):书架隔层上的物品、桌面上的显示器。</figcaption></figure>
+  <figure style="display:flex;align-items:center;background:#f4f7fb;border-radius:8px;padding:12px">
+   <figcaption style="text-align:left;color:#3a4456;font-size:13px;line-height:1.9">
+    <b>恢复出的 <code>support_on</code> 关系(5 个):</b><br>
+    &bull; 台灯 &rarr; 床头柜顶面<br>
+    &bull; 显示器 &rarr; 桌面<br>
+    &bull; 桌面台灯 &rarr; 桌面<br>
+    &bull; 书 &rarr; 书架隔层(上)<br>
+    &bull; 书 &rarr; 书架隔层(下)<br>
+    <span class="muted">落地灯正确保持落地;窗帘不被绑定到床上。</span></figcaption>
+  </figure>
+ </div>
+ <table>
+  <tr><th>情况</th><th>修复前</th><th>修复后</th></tr>
+  <tr><td>桌面上的灯(床头柜 / 书桌)</td><td class="good">检测到</td><td class="good">检测到</td></tr>
+  <tr><td>书架 <b>内部隔层</b> 上的书</td><td>漏检 <span class="tag">仅顶面</span></td><td class="good">检测到(逐隔层表面)</td></tr>
+  <tr><td>床后的窗帘</td><td>错误 <code>support_on</code> 床 <span class="tag">错</span></td><td class="good">已排除(墙物)</td></tr>
+  <tr><td>落地灯 / 落地绿植</td><td class="good">落地</td><td class="good">落地</td></tr>
+ </table>
+ <p class="muted">此前 SupportGraph 只建模物体的 <b>顶</b> 面(所以书架内部的书被漏掉),还会把墙物绑到邻近家具上。
+  两点都已修复;由 7 个单元测试覆盖。这正是让运行时的 <code>relation_support_on</code> /
+  <code>support_surface_contains_child</code> 检查通过、并让物理引擎消费者知道"灯会随床头柜一起移动"的关键。</p>
+ <p class="muted"><b>法向分类器升级:</b>在 bbox 启发式之上,一个网格模块读取每个支撑物的几何,把 <b>朝上的水平面</b>
+  聚类成真实支撑面 —— 例如恢复出一个 Parson 5 层书架的 <b>5 个真实隔层高度</b>(z=0.10/0.45/0.80/1.14/1.49&nbsp;m)。
+  子物体随后绑定到 <i>真实</i> 表面,不存在表面处则被拒绝(漂浮在两层之间的书不算"被支撑")。
+  <b>检索覆盖</b> 也被拓宽,小物件(台灯/落地灯、显示器、书、花瓶、绿植&hellip;)现在能解析到正确的 HSSD 网格而非失败
+  —— 上图的灯和显示器都是真实检索到的资产。</p>
+</div>
+
+<!-- ARTICULATION 开合可达性 -->
+<div class="card" style="border-color:#cfe0f5;background:#fbfdff">
+ <h2>开合可达性:抽屉/柜门真的打得开吗? <span class="muted">— 看着没问题、却没法用的场景</span></h2>
+ <p class="muted" style="margin-top:0">
+  一个场景可以通过碰撞 + 稳定性检查,却依然 <b>没法用</b>:抽屉柜塞进墙角、抽屉拉出来撞墙,或书桌抽屉正对着办公椅拉不开。
+  报告里"articulated 物体放置"这一缺口正是这个 —— 现有工作只 <b>检索</b> articulated 资产,没人验证放好之后开合是否可达。
+  我们不依赖 PartNet-Mobility / ArtVIP 的 URDF(SceneSmith 因前者关节质量差而弃用),而是从类别 + 几何 <b>参数化</b> 建模:
+  每件储物家具的抽屉/柜门在正面扫出一块开合体积,我们检查它是否被其他物体或墙挡住,并通过移位修复。
+  这套检查同样能泛化到真实 URDF —— 那时关节轴/行程从 URDF 来,而不是类别先验。</p>
+ <figure style="margin:14px 0">
+  <img src="scenesmith/articulation_office.png" style="width:100%;object-fit:contain;background:#fff;border:1px solid #e1e8f0">
+  <figcaption>书房俯视图,虚线框 = 抽屉/柜门打开所需的扫掠体积。<b>左:</b>书桌抽屉(红框)被办公椅完全挡住(可开 0&nbsp;m / 需 0.45&nbsp;m)。
+   <b>右:</b>我们的间隙修复把书桌挪开,抽屉可完全打开(绿框)。</figcaption>
+ </figure>
+ <table>
+  <tr><th>房间</th><th>受阻的抽屉/柜门<br><span class="muted">布置结果 &rarr; +修复</span></th><th>说明</th></tr>
+  <tr><td>卧室</td><td>2 &rarr; <b class="good">1</b></td><td>床头柜抽屉修好;抽屉柜抽屉(0.5m)紧贴床,房间太小无法完全打开 —— 诚实保留</td></tr>
+  <tr><td>客厅</td><td>0 &rarr; <b class="good">0</b></td><td>电视柜门有间隙</td></tr>
+  <tr><td>书房</td><td>1 &rarr; <b class="good">0</b></td><td>书桌抽屉被办公椅 100% 挡住 &rarr; 移位后可开</td></tr>
+  <tr style="border-top:2px solid #cfe0f5"><td><b>合计</b></td><td><b>3 &rarr; <span class="good">1</span></b></td><td>修复 2 处,1 处因房间过小诚实标记为不可修</td></tr>
+ </table>
+ <p class="muted">这是"看着没问题、物理上却没法用"的真实失败:碰撞为零、能稳定站立,但抽屉拉不开。新增指标
+  <b>开合无碰撞率</b>。由 4 个单元测试覆盖(开合畅通 / 被物体挡住 / 撞墙 / 开放式书架无需间隙)。
+  <span class="muted">诚实说明:正面方向用"背靠最近墙、朝向房间最开阔一侧"的启发式推断(我们的场景没有可靠的朝向轴);
+  极窄房间里的家具会被诚实标记为不可修,而非假装修好。</span></p>
+</div>
+
+<!-- SIMREADYBENCH 统一评测 -->
+<div class="card" style="border-color:#cfe0f5;background:#fbfdff">
+ <h2>SimReadyBench:统一指标面板 <span class="muted">— 语义分高、物理/可用性差的方法一眼现形</span></h2>
+ <p class="muted" style="margin-top:0">
+  把所有信号汇成一张表:<b>语义</b>(物体数 CNT、越界 OOB、可导航自由面积 NAV、可接近率 REACH)、
+  <b>物理/可用性</b>(碰撞 COL、开合受阻 ARTblk、跨仿真器稳定性 STB、物理接地 PHYS)。
+  报告指出"高语义分但低物理/低可审计性"的方法需要这样的统一面板才能现形。这里把最强的智能体基线
+  SceneSmith(Qwen 与 GPT-4o 两个通道)和我们的完整仿真就绪层对比。</p>
+ <table style="font-size:13px">
+  <tr><th>方法 / 房间</th><th>CNT</th><th>OOB&darr;</th><th>COL&darr;</th><th>ARTblk&darr;</th><th>NAV</th><th>REACH</th><th>STB&uarr;</th><th>PHYS</th></tr>
+  <tr><td>卧室 · SceneSmith/Qwen</td><td>3</td><td>0</td><td>2</td><td>2</td><td>0.52</td><td>1.0</td><td>1.0</td><td>✗</td></tr>
+  <tr><td>卧室 · SceneSmith/GPT-4o</td><td>3</td><td>0</td><td>1</td><td>2</td><td>0.50</td><td>1.0</td><td>1.0</td><td>✗</td></tr>
+  <tr style="background:#eefaf0"><td>卧室 · <b>+ 我们的</b></td><td>3</td><td>0</td><td class="good">0</td><td class="good">1</td><td>0.49</td><td>1.0</td><td class="good">1.0</td><td class="good">✓</td></tr>
+  <tr><td>客厅 · SceneSmith/GPT-4o</td><td>6</td><td>0</td><td>1</td><td>0</td><td>0.49</td><td>1.0</td><td>0.83</td><td>✗</td></tr>
+  <tr style="background:#eefaf0"><td>客厅 · <b>+ 我们的</b></td><td>6</td><td>0</td><td class="good">0</td><td class="good">0</td><td>0.49</td><td>1.0</td><td class="good">1.0</td><td class="good">✓</td></tr>
+  <tr><td>书房 · SceneSmith/GPT-4o</td><td>3</td><td>0</td><td>1</td><td>1</td><td>0.75</td><td>1.0</td><td>0.33</td><td>✗</td></tr>
+  <tr style="background:#eefaf0"><td>书房 · <b>+ 我们的</b></td><td>3</td><td>0</td><td class="good">0</td><td class="good">0</td><td>0.72</td><td>1.0</td><td class="good">1.0</td><td class="good">✓</td></tr>
+ </table>
+ <p class="muted">读法:SceneSmith 在 <b>语义层</b>(CNT/OOB/NAV/REACH)都不错 —— 物体齐、不越界、能走动、能接近;
+  但在 <b>物理/可用性层</b> 普遍有碰撞(COL&ge;1)、抽屉/柜门打不开(ARTblk&ge;1)、无物理属性(PHYS ✗)、
+  跨仿真器稳定性不满(书房仅 33%)。我们的仿真就绪层在 <b>不破坏语义</b> 的前提下把这些全部补齐
+  (COL&rarr;0、ARTblk 大幅下降、PHYS&rarr;✓、STB&rarr;100%)。
+  <span class="muted">诚实范围:外部布局基线(Holodeck/PhyScene/LayoutVLM 等)未在此跑 —— 需要各自的完整环境;
+  这里对比的是最强智能体基线 SceneSmith。审计四轴(provenance/replay/honesty/blocked)由 SimReadyBench 另行评估。</span></p>
+</div>
+
+<!-- VGGT 重建 vs 网格拼装 -->
+<div class="card" style="border-color:#cfe0f5;background:#fbfdff">
+ <h2>从生成图直接重建 vs. 网格拼装 <span class="muted">— 为什么"像生成图"的正确做法是 VGGT 重建</span></h2>
+ <p class="muted" style="margin-top:0">
+  本页其它渲染图用的是"检索 HSSD 网格 + 按包围盒摆进盒子房间"的合成方式 —— 它在朝向、台面高度、贴图上天然脆弱。
+  更好的路线(也是本项目核心 GeoGround):把一张 <b>连贯的生成图</b> 用 VGGT-Omega 直接重建成度量 3D,
+  几何与外观同源,自动避开上述问题。下面是实测。</p>
+
+ <h3 style="font-size:14.5px;margin:18px 0 4px">A. 单图 &rarr; VGGT &rarr; 带贴图的 3D 网格(可行 ✓)</h3>
+ <div class="grid">
+  <figure><img src="vggt/source_bedroom.png"><figcaption>输入:gpt-image-2 卧室图</figcaption></figure>
+  <figure><img src="vggt/recon_faithful_bedroom.png"><figcaption><b>重建网格 · 原视角</b> —— 与生成图几乎一致(但已是真实 3D 几何)</figcaption></figure>
+  <figure><img src="vggt/recon_orbit_bedroom.png"><figcaption><b>重建网格 · 转动视角</b> —— 暴露单视图 2.5D 局限(看不到处有空洞)</figcaption></figure>
+ </div>
+ <p class="muted">单图重建出的网格从原视角渲染 <b>就是生成图的样子</b>(236k 顶点 / 463k 面,无朝向/腾空/贴图问题);
+  只有当相机大幅转动时才露出单视图固有的 2.5D 空洞。</p>
+
+ <h3 style="font-size:14.5px;margin:20px 0 4px">B. 让 gpt-image-2 一次出"4 个机位" &rarr; VGGT 多视图融合(不可行 ✗)</h3>
+ <div class="grid" style="grid-template-columns:1fr 1fr">
+  <figure><img src="vggt/mv_grid_gptimage2.png" style="object-fit:contain;background:#fff"><figcaption>gpt-image-2 一次生成的"同一卧室 4 个角度" —— <b>风格</b>很一致</figcaption></figure>
+  <figure><img src="vggt/mv_fused_vggt.png" style="object-fit:contain;background:#fff"><figcaption>把 4 个面板喂给 VGGT 多视图融合 —— 左:真彩色已错位重影;右:按视图染色,4 色<b>各自散开不重合</b></figcaption></figure>
+ </div>
+ <p class="muted">结论:gpt-image-2 的"多机位"<b>风格一致但几何不刚性一致</b> —— 是各自幻想出的相似图,不是同一 3D 场景的多视图。
+  喂给 VGGT 后相机被硬塞到 0.26–0.6m 间距、点云错位(右图四色不重叠即证)。<b>所以"文生图直出多机位再三维重建"这条路走不通。</b></p>
+
+ <h3 style="font-size:14.5px;margin:20px 0 4px">C. 重建驱动的物体摆放 —— 把"重建"和"渲染"接起来</h3>
+ <p class="muted" style="margin-top:0">之前"检索网格拼装"的渲染和三维重建<b>互不相关</b>,所以物体悬空、台灯不坐在桌上。
+  正解:<b>每个物体的位置、坐落高度、尺寸都直接取自它在 VGGT 重建里的度量包围盒</b>(台灯的重建底=床头柜的重建顶 &rarr; 台灯就坐在床头柜上),
+  并把挂画/窗等贴到墙上、过滤噪声小物。下图三个房间的"我们的"渲染全部由此生成 —— 物体级、可分离/可仿真,且<b>无悬空</b>。</p>
+ <div class="grid">
+  <figure><img src="vggt/grounded_bedroom.png"><figcaption>卧室 —— 台灯坐在床头柜上、挂画贴墙</figcaption></figure>
+  <figure><img src="vggt/grounded_livingroom.png"><figcaption>客厅 —— 沙发/茶几落地(原先悬空的台灯、木桩已消除)</figcaption></figure>
+  <figure><img src="vggt/grounded_office.png"><figcaption>书房 —— 书架/办公椅落地</figcaption></figure>
+ </div>
+ <p class="muted">对比:稠密重建(A)最像生成图但有空洞、不可分离;<b>重建驱动摆放(C)</b>是干净的物体级场景、摆放从重建来、可直接做物理与仿真 —— 两者互补。</p>
+
+ <p class="muted"><b>结论与建议:</b>① 想要<b>物体级、可仿真、摆放准确</b>的场景 &rarr; <b>重建驱动摆放</b>(C,本次实现,已设为主"Ours"渲染);
+  ② 想要"最像生成图"的整图视觉 &rarr; <b>单图 VGGT 稠密重建</b>(A);
+  ③ <b>不要</b>指望 gpt-image-2 直出一致多机位(B,已证伪);
+  ④ 若要自由视角无空洞,再接一个 <b>新视图合成(NVS)</b> 模型补几个一致视角(后续工作)。</p>
+</div>
+
+<!-- 卧室 -->
+<div class="card">
+ <h2>卧室 <span class="muted">— 检测到 11 个物体(床、床头柜、抽屉柜、灯、窗、窗帘、地毯……)</span></h2>
+ <div class="grid">
+  <figure><img src="images/bedroom.png"><figcaption>输入 — <b>gpt-image-2</b></figcaption></figure>
+  <figure><img src="bedroom/original_render.png"><figcaption><b>原版</b> — 长方体原型</figcaption></figure>
+  <figure><img src="bedroom/enhanced_render.png"><figcaption><b>增强版(我们的)</b> — 重建驱动摆放(姿态取自 VGGT 3D,无悬空)</figcaption></figure>
+ </div>
+ <table>
+  <tr><th>指标</th><th>原版</th><th>增强版(我们的)</th></tr>
+  <tr><td>物体间重叠 &darr;</td><td>9</td><td class="good">0</td></tr>
+  <tr><td>校验失败 &darr;</td><td>13</td><td class="good">1</td></tr>
+  <tr><td>支撑关系 &uarr;</td><td>0</td><td class="good">1</td></tr>
+  <tr><td>物理属性</td><td>无 <span class="tag">常数</span></td><td class="good">已估计 <span class="tag tagok">质量/摩擦</span></td></tr>
+  <tr><td>外观匹配资产</td><td>仅类别</td><td class="good">CLIP 图像&harr;名称</td></tr>
+  <tr><td>Sim2Sim 稳定性 &uarr;</td><td>0%</td><td class="good">100%</td></tr>
+  <tr><td>Sim2Sim 分歧(m)&darr;</td><td>4.81</td><td class="good">0.23</td></tr>
+ </table>
+</div>
+
+<!-- 客厅 -->
+<div class="card">
+ <h2>客厅 <span class="muted">— 检测到 9 个物体(沙发、桌、地毯、灯、衣柜、窗……)</span></h2>
+ <div class="grid">
+  <figure><img src="images/livingroom.png"><figcaption>输入 — <b>gpt-image-2</b></figcaption></figure>
+  <figure><img src="livingroom/original_render.png"><figcaption><b>原版</b> — 长方体原型</figcaption></figure>
+  <figure><img src="livingroom/enhanced_render.png"><figcaption><b>增强版(我们的)</b> — 重建驱动摆放(姿态取自 VGGT 3D,无悬空)</figcaption></figure>
+ </div>
+ <table>
+  <tr><th>指标</th><th>原版</th><th>增强版(我们的)</th></tr>
+  <tr><td>物体间重叠 &darr;</td><td>5</td><td class="good">0</td></tr>
+  <tr><td>校验失败 &darr;</td><td>9</td><td class="good">1</td></tr>
+  <tr><td>支撑关系 &uarr;</td><td>0</td><td>0</td></tr>
+  <tr><td>物理属性</td><td>无 <span class="tag">常数</span></td><td class="good">已估计 <span class="tag tagok">质量/摩擦</span></td></tr>
+  <tr><td>外观匹配资产</td><td>仅类别</td><td class="good">CLIP 图像&harr;名称</td></tr>
+  <tr><td>Sim2Sim 稳定性 &uarr;</td><td>17%</td><td class="good">100%</td></tr>
+  <tr><td>Sim2Sim 分歧(m)&darr;</td><td>3.08</td><td class="good">0.02</td></tr>
+ </table>
+</div>
+
+<!-- 书房 -->
+<div class="card">
+ <h2>书房 <span class="muted">— 检测到 10 个物体(椅、书桌、书架、沙发、地毯、灯、显示器……)</span></h2>
+ <div class="grid">
+  <figure><img src="images/office.png"><figcaption>输入 — <b>gpt-image-2</b></figcaption></figure>
+  <figure><img src="office/original_render.png"><figcaption><b>原版</b> — 长方体原型</figcaption></figure>
+  <figure><img src="office/enhanced_render.png"><figcaption><b>增强版(我们的)</b> — 重建驱动摆放(姿态取自 VGGT 3D,无悬空)</figcaption></figure>
+ </div>
+ <table>
+  <tr><th>指标</th><th>原版</th><th>增强版(我们的)</th></tr>
+  <tr><td>物体间重叠 &darr;</td><td>14</td><td class="good">0</td></tr>
+  <tr><td>校验失败 &darr;</td><td>17</td><td class="good">3</td></tr>
+  <tr><td>支撑关系 &uarr;</td><td>0</td><td class="good">1</td></tr>
+  <tr><td>物理属性</td><td>无 <span class="tag">常数</span></td><td class="good">已估计 <span class="tag tagok">质量/摩擦</span></td></tr>
+  <tr><td>外观匹配资产</td><td>仅类别</td><td class="good">CLIP 图像&harr;名称</td></tr>
+  <tr><td>Sim2Sim 稳定性 &uarr;</td><td>0%</td><td class="good">100%</td></tr>
+  <tr><td>Sim2Sim 分歧(m)&darr;</td><td>15.46</td><td class="good">0.04</td></tr>
+ </table>
+</div>
+
+<!-- ABO 物理属性实验 -->
+<div class="card">
+ <h2>在真实商品重量上估计物理属性(ABO)</h2>
+ <p class="muted">PhysPropertyNet 与各基线在 4,927 件真实家具上对比;真值质量 = 厂商标注重量(Amazon Berkeley Objects)。
+ 原版管线用常数质量(约 5&nbsp;kg);我们的方法逐类别估计并校准。</p>
+ <table>
+  <tr><th>方法</th><th>MAE(kg)&darr;</th><th>30% 内 &uarr;</th></tr>
+  <tr><td>常数 5&nbsp;kg <span class="muted">(原版 / SceneSmith 默认)</span></td><td>23.1</td><td>8%</td></tr>
+  <tr><td>类别无关</td><td>21.3</td><td>24%</td></tr>
+  <tr><td>密度先验 <span class="muted">(关键词类别 + 含空气密度)</span></td><td>10.5</td><td>43%</td></tr>
+  <tr><td>校准(全局)</td><td>11.9</td><td>46%</td></tr>
+  <tr><td><b>校准(逐类别,我们的)</b></td><td class="good">9.7</td><td class="good">53%</td></tr>
+ </table>
+ <p class="muted">我们的层赋给头对头场景的质量在物理上是合理的 —— 例如双人床&nbsp;53&nbsp;kg、
+  L 形沙发&nbsp;65&nbsp;kg、书桌&nbsp;44&nbsp;kg、办公椅&nbsp;11&nbsp;kg、落地灯&nbsp;9&nbsp;kg、绿植&nbsp;4&nbsp;kg
+  —— 而 SceneSmith 用的是常数默认值。<span class="muted">诚实说明:bbox 体积模型对尺寸极端的物件偏弱
+  (台灯和落地灯同属一类);逐类别的质量下限让小物件保持合理,逐类别校准在分布内有帮助,
+  但不会盲目套用到分布外的尺寸上。</span></p>
+</div>
+
+<p class="muted">在全部 3 个房间上,增强管线通过支撑感知的非穿透投影消除了物体间重叠(平均 9.3&rarr;<b>0</b>),
+把跨仿真器稳定性提升到 <b>100%</b>(非穿透物体在 Drake 与 MuJoCo 中一致沉降),恢复了支撑关系,并估计了物理属性。
+渲染:长方体原型(原版)对比检索到的 HSSD 网格(增强版);单视图 VGGT-&Omega; 重建。输入图像由 gpt-image-2 生成。</p>
+<p class="muted">已应用的修复(5 项):<b>(1)</b> 扁平物体先验(地毯 &le;2&nbsp;cm,不沿 z 拉伸);
+<b>(2)</b> 完整四墙房间 + 窗/窗帘贴墙;<b>(3)</b> 外观感知的 CLIP 图像&harr;名称
+检索(木质床而非通用金属架);<b>(4)</b> Cycles 路径追踪 + 全局光/AO + 自发光灯;
+<b>(5)</b> SAM 掩膜足迹(逐物体紧致掩膜而非 bbox 矩形 —— 例如抽屉柜进深
+1.06&rarr;0.29&nbsp;m),把校验失败降到 1&ndash;3、重叠降到 0。剩余:完整逆向
+渲染(从照片恢复场景光照/BRDF)是后续工作。</p>
+
+</body></html>

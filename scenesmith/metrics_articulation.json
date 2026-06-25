@@ -1,0 +1,41 @@
+{
+  "bedroom": {
+    "designed": [
+      {
+        "object_id": "nightstand_0",
+        "joint": "drawer",
+        "blocked_by": "bed_0",
+        "required_m": 0.4,
+        "available_m": 0.264
+      },
+      {
+        "object_id": "dresser_0",
+        "joint": "drawer",
+        "blocked_by": "bed_0",
+        "required_m": 0.5,
+        "available_m": 0.167
+      }
+    ],
+    "after_repair": 1
+  },
+  "living": {
+    "designed": [],
+    "after_repair": 0
+  },
+  "office": {
+    "designed": [
+      {
+        "object_id": "wooden_desk_0",
+        "joint": "drawer",
+        "blocked_by": "office_chair_0",
+        "required_m": 0.45,
+        "available_m": 0.0
+      }
+    ],
+    "after_repair": 0
+  },
+  "total": {
+    "designed": 3,
+    "after_repair": 1
+  }
+}

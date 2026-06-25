@@ -1,0 +1,24 @@
+{
+  "llm": "gpt-4o",
+  "prompt": "A bedroom with a bed, a nightstand with a lamp, and a dresser.",
+  "scenesmith_gpt_designed": {
+    "num_objects": 3,
+    "validation_status": "fail",
+    "validation_failures": 1,
+    "inter_object_overlaps": 1,
+    "support_relations": 0,
+    "physics_grounded": false,
+    "sim2sim_stability_agree": 1.0,
+    "sim2sim_mean_disagree_m": 0.0
+  },
+  "scenesmith_gpt_plus_ours": {
+    "num_objects": 3,
+    "validation_status": "pass",
+    "validation_failures": 0,
+    "inter_object_overlaps": 0,
+    "support_relations": 0,
+    "physics_grounded": true,
+    "sim2sim_stability_agree": 1.0,
+    "sim2sim_mean_disagree_m": 0.001
+  }
+}

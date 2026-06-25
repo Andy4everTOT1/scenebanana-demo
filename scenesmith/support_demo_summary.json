@@ -1,0 +1,32 @@
+{
+  "n_support_relations": 5,
+  "relations": [
+    {
+      "child": "lamp_0",
+      "surface": "nightstand_0_top"
+    },
+    {
+      "child": "monitor_0",
+      "surface": "desk_0_top"
+    },
+    {
+      "child": "desk_lamp_0",
+      "surface": "desk_0_top"
+    },
+    {
+      "child": "book_0",
+      "surface": "bookshelf_0_shelf_1_0"
+    },
+    {
+      "child": "book_1",
+      "surface": "bookshelf_0_shelf_0_5"
+    }
+  ],
+  "layer1": [
+    "lamp_0",
+    "monitor_0",
+    "desk_lamp_0",
+    "book_0",
+    "book_1"
+  ]
+}
