@@ -1,0 +1,104 @@
+[
+  {
+    "name": "bedroom",
+    "image": "images/bedroom.png",
+    "detections": [
+      "bed",
+      "nightstand",
+      "dresser",
+      "lamp",
+      "lamp",
+      "window",
+      "curtain",
+      "curtain",
+      "rug",
+      "picture",
+      "picture"
+    ],
+    "original": {
+      "num_objects": 11,
+      "validation_status": "fail",
+      "validation_failures": 13,
+      "support_relations": 0,
+      "physics_grounded": false,
+      "sim2sim_stability_agree": 0.0,
+      "sim2sim_mean_disagree_m": 4.814
+    },
+    "enhanced": {
+      "num_objects": 11,
+      "validation_status": "fail",
+      "validation_failures": 1,
+      "support_relations": 1,
+      "physics_grounded": true,
+      "sim2sim_stability_agree": 1.0,
+      "sim2sim_mean_disagree_m": 0.234
+    }
+  },
+  {
+    "name": "livingroom",
+    "image": "images/livingroom.png",
+    "detections": [
+      "sofa",
+      "table",
+      "rug",
+      "lamp",
+      "bookshelf",
+      "window",
+      "curtain",
+      "picture",
+      "picture"
+    ],
+    "original": {
+      "num_objects": 9,
+      "validation_status": "fail",
+      "validation_failures": 9,
+      "support_relations": 0,
+      "physics_grounded": false,
+      "sim2sim_stability_agree": 0.167,
+      "sim2sim_mean_disagree_m": 3.077
+    },
+    "enhanced": {
+      "num_objects": 9,
+      "validation_status": "fail",
+      "validation_failures": 1,
+      "support_relations": 0,
+      "physics_grounded": true,
+      "sim2sim_stability_agree": 1.0,
+      "sim2sim_mean_disagree_m": 0.022
+    }
+  },
+  {
+    "name": "office",
+    "image": "images/office.png",
+    "detections": [
+      "chair",
+      "desk",
+      "bookshelf",
+      "sofa",
+      "rug",
+      "window",
+      "lamp",
+      "monitor",
+      "picture",
+      "picture"
+    ],
+    "original": {
+      "num_objects": 10,
+      "validation_status": "fail",
+      "validation_failures": 17,
+      "support_relations": 0,
+      "physics_grounded": false,
+      "sim2sim_stability_agree": 0.0,
+      "sim2sim_mean_disagree_m": 15.457
+    },
+    "enhanced": {
+      "num_objects": 10,
+      "validation_status": "fail",
+      "validation_failures": 3,
+      "support_relations": 1,
+      "physics_grounded": true,
+      "sim2sim_stability_agree": 1.0,
+      "sim2sim_mean_disagree_m": 0.044
+    }
+  }
+]

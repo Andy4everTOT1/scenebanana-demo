@@ -1,0 +1,35 @@
+{
+  "name": "livingroom",
+  "image": "images/livingroom.png",
+  "detections": [
+    "sofa",
+    "table",
+    "rug",
+    "lamp",
+    "bookshelf",
+    "window",
+    "curtain",
+    "picture",
+    "picture"
+  ],
+  "original": {
+    "num_objects": 9,
+    "validation_status": "fail",
+    "validation_failures": 9,
+    "support_relations": 0,
+    "physics_grounded": false,
+    "sim2sim_stability_agree": 0.167,
+    "sim2sim_mean_disagree_m": 3.077,
+    "inter_object_overlaps": 5
+  },
+  "enhanced": {
+    "num_objects": 9,
+    "validation_status": "fail",
+    "validation_failures": 1,
+    "support_relations": 0,
+    "physics_grounded": true,
+    "sim2sim_stability_agree": 1.0,
+    "sim2sim_mean_disagree_m": 0.022,
+    "inter_object_overlaps": 0
+  }
+}

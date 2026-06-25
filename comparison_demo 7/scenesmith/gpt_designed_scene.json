@@ -1,0 +1,137 @@
+{
+ "schema_version": 1,
+ "created_at": "2026-06-23T03:38:47.651098+00:00",
+ "scene_id": "gpt_designed",
+ "stage_name": "scene_after_furniture",
+ "room_geometry": {
+  "room_id": "bedroom",
+  "room_type": "bedroom",
+  "length": 4.0,
+  "width": 3.5,
+  "wall_height": 2.5,
+  "wall_thickness": 0.05,
+  "floor_z": 0.0,
+  "sdf_path": null,
+  "walls": [],
+  "openings": [],
+  "metadata": {}
+ },
+ "objects": [
+  {
+   "object_id": "bed_0",
+   "object_type": "furniture",
+   "semantic_role": "bed",
+   "layer": 0,
+   "dimensions": {
+    "width": 1.600000023841858,
+    "depth": 2.1411631107330322,
+    "height": 0.8618201258542051
+   },
+   "pose": {
+    "x": 0.11657816935631682,
+    "y": -0.5183935929437251,
+    "z": 0.0,
+    "yaw_deg": 0.4590176969206106,
+    "rotation_wxyz": [
+     0.9999919773,
+     0.0,
+     0.0,
+     0.0040056744
+    ]
+   },
+   "asset_ref": {
+    "asset_id": "bed_0",
+    "source_asset_id": null,
+    "hssd_mesh_id": "16100ba2844b8f89c2ba6e30677d13ffe45d82a7",
+    "geometry_path": null,
+    "sdf_path": null,
+    "image_path": null,
+    "source": "hssd",
+    "metadata": {}
+   },
+   "support_surfaces": [],
+   "placement_info": null,
+   "source_paths": {},
+   "metadata": {}
+  },
+  {
+   "object_id": "nightstand_0",
+   "object_type": "furniture",
+   "semantic_role": "nightstand",
+   "layer": 0,
+   "dimensions": {
+    "width": 0.5,
+    "depth": 0.3544035851955414,
+    "height": 0.4728107032879212
+   },
+   "pose": {
+    "x": 1.368091356795295,
+    "y": -0.6621832811850982,
+    "z": 0.0,
+    "yaw_deg": 90.40567718234719,
+    "rotation_wxyz": [
+     0.704599055,
+     0.0,
+     0.0,
+     0.7096056452
+    ]
+   },
+   "asset_ref": {
+    "asset_id": "nightstand_0",
+    "source_asset_id": null,
+    "hssd_mesh_id": "defe405f45ef55bfc876b2d25b30762478d9a819",
+    "geometry_path": null,
+    "sdf_path": null,
+    "image_path": null,
+    "source": "hssd",
+    "metadata": {}
+   },
+   "support_surfaces": [],
+   "placement_info": null,
+   "source_paths": {},
+   "metadata": {}
+  },
+  {
+   "object_id": "dresser_0",
+   "object_type": "furniture",
+   "semantic_role": "dresser",
+   "layer": 0,
+   "dimensions": {
+    "width": 1.2000000476837158,
+    "depth": 0.45925717055797577,
+    "height": 0.6396797263707441
+   },
+   "pose": {
+    "x": 1.2356163963859326,
+    "y": 0.8598718509724945,
+    "z": 0.0,
+    "yaw_deg": 101.60135725531786,
+    "rotation_wxyz": [
+     0.632020124,
+     0.0,
+     0.0,
+     0.7749519746
+    ]
+   },
+   "asset_ref": {
+    "asset_id": "dresser_0",
+    "source_asset_id": null,
+    "hssd_mesh_id": "8a2467f42dc962b5a3bcc7868f6faf9ea31397dd",
+    "geometry_path": null,
+    "sdf_path": null,
+    "image_path": null,
+    "source": "hssd",
+    "metadata": {}
+   },
+   "support_surfaces": [],
+   "placement_info": null,
+   "source_paths": {},
+   "metadata": {}
+  }
+ ],
+ "relations": [],
+ "placement_intents": [],
+ "placement_results": [],
+ "validation_report": null,
+ "metadata": {}
+}

@@ -1,0 +1,139 @@
+{
+ "schema_version": 1,
+ "created_at": "2026-06-23T09:10:48.924128+00:00",
+ "scene_id": "office_designed",
+ "stage_name": "scene_after_furniture",
+ "room_geometry": {
+  "room_id": "bedroom",
+  "room_type": "bedroom",
+  "length": 4.0,
+  "width": 3.5,
+  "wall_height": 2.6,
+  "wall_thickness": 0.05,
+  "floor_z": 0.0,
+  "sdf_path": null,
+  "walls": [],
+  "openings": [],
+  "metadata": {}
+ },
+ "objects": [
+  {
+   "object_id": "wooden_desk_0",
+   "object_type": "furniture",
+   "semantic_role": "wooden_desk",
+   "layer": 0,
+   "dimensions": {
+    "width": 1.4000000357627869,
+    "depth": 0.7003828883171082,
+    "height": 0.8184614727010597
+   },
+   "pose": {
+    "x": 0.7396278555289003,
+    "y": 1.2091467744153426,
+    "z": 0.0,
+    "yaw_deg": -0.9144075583234382,
+    "rotation_wxyz": [
+     0.9999681623,
+     0.0,
+     0.0,
+     -0.0079796266
+    ]
+   },
+   "asset_ref": {
+    "asset_id": "wooden_desk_0",
+    "source_asset_id": null,
+    "hssd_mesh_id": "eb6aa6ead94ef785c022795b36da765ac1c1cbe1",
+    "geometry_path": null,
+    "sdf_path": null,
+    "image_path": null,
+    "source": "hssd",
+    "metadata": {}
+   },
+   "support_surfaces": [],
+   "placement_info": null,
+   "source_paths": {},
+   "metadata": {}
+  },
+  {
+   "object_id": "office_chair_0",
+   "object_type": "furniture",
+   "semantic_role": "office_chair",
+   "layer": 0,
+   "dimensions": {
+    "width": 0.6499999761581421,
+    "depth": 0.6644494533538818,
+    "height": 0.9182740495351784
+   },
+   "pose": {
+    "x": 0.7143535738977682,
+    "y": 0.7135634260343239,
+    "z": 0.0,
+    "yaw_deg": 0.7023625649548322,
+    "rotation_wxyz": [
+     0.9999812161,
+     0.0,
+     0.0,
+     0.0061292313
+    ]
+   },
+   "asset_ref": {
+    "asset_id": "office_chair_0",
+    "source_asset_id": null,
+    "hssd_mesh_id": "d959903a7b709cb037958ea246bde455f9858772",
+    "geometry_path": null,
+    "sdf_path": null,
+    "image_path": null,
+    "source": "hssd",
+    "metadata": {}
+   },
+   "support_surfaces": [],
+   "placement_info": null,
+   "source_paths": {},
+   "metadata": {}
+  },
+  {
+   "object_id": "bookshelf_0",
+   "object_type": "furniture",
+   "semantic_role": "bookshelf",
+   "layer": 0,
+   "dimensions": {
+    "width": 0.800000011920929,
+    "depth": 0.40000003576278687,
+    "height": 1.5066665410995483
+   },
+   "pose": {
+    "x": -1.4788217143085984,
+    "y": -0.5219146789601915,
+    "z": 0.0,
+    "yaw_deg": 91.52791418809036,
+    "rotation_wxyz": [
+     0.69761595,
+     0.0,
+     0.0,
+     0.716471902
+    ]
+   },
+   "asset_ref": {
+    "asset_id": "bookshelf_0",
+    "source_asset_id": null,
+    "hssd_mesh_id": "c2a2376b3ffd55be86194e9be4a8d48c8f1ff46b",
+    "geometry_path": null,
+    "sdf_path": null,
+    "image_path": null,
+    "source": "hssd",
+    "metadata": {}
+   },
+   "support_surfaces": [],
+   "placement_info": null,
+   "source_paths": {},
+   "metadata": {}
+  }
+ ],
+ "relations": [],
+ "placement_intents": [],
+ "placement_results": [],
+ "validation_report": null,
+ "metadata": {
+  "articulation_repaired": 0
+ }
+}

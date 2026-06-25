@@ -1,0 +1,36 @@
+{
+  "name": "office",
+  "image": "images/office.png",
+  "detections": [
+    "chair",
+    "desk",
+    "bookshelf",
+    "sofa",
+    "rug",
+    "window",
+    "lamp",
+    "monitor",
+    "picture",
+    "picture"
+  ],
+  "original": {
+    "num_objects": 10,
+    "validation_status": "fail",
+    "validation_failures": 17,
+    "support_relations": 0,
+    "physics_grounded": false,
+    "sim2sim_stability_agree": 0.0,
+    "sim2sim_mean_disagree_m": 15.457,
+    "inter_object_overlaps": 14
+  },
+  "enhanced": {
+    "num_objects": 10,
+    "validation_status": "fail",
+    "validation_failures": 3,
+    "support_relations": 1,
+    "physics_grounded": true,
+    "sim2sim_stability_agree": 1.0,
+    "sim2sim_mean_disagree_m": 0.044,
+    "inter_object_overlaps": 0
+  }
+}
